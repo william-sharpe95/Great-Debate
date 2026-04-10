@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Great Debate</title>
+  <style>
+    :root {
+      --bg: #090b12;
+      --bg-soft: #111524;
+      --card: rgba(16, 22, 36, 0.78);
+      --card-strong: #151b2e;
+      --text: #f7f8ff;
+      --muted: #a0aac8;
+      --border: rgba(255, 255, 255, 0.12);
+      --accent: #ff6b4a;
+      --accent-2: #7f6dff;
+      --accent-3: #2de8b0;
+      --success: #58e385;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.42);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(950px 500px at 15% -20%, rgba(127, 109, 255, 0.3), transparent 55%),
+        radial-gradient(900px 480px at 90% 0%, rgba(255, 107, 74, 0.24), transparent 50%),
+        radial-gradient(700px 300px at 50% 110%, rgba(45, 232, 176, 0.12), transparent 60%),
+        var(--bg);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .layout {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.1rem;
+    }
+
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(88, 227, 133, 0.8);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      70% {
+        box-shadow: 0 0 0 9px rgba(88, 227, 133, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(88, 227, 133, 0);
+      }
+    }
+
+    .hero {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: 1.3fr 1fr;
+      margin-bottom: 1.2rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      padding: 2.1rem;
+      position: relative;
+    }
+
+    .hero-main h1 {
+      margin: 0 0 0.7rem;
+      font-size: clamp(2rem, 4.5vw, 3.3rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #ffffff 0%, #d9ddff 45%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      margin: 0 0 1.2rem;
+      color: var(--accent-3);
+      font-weight: 650;
+      font-size: 1.02rem;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .stats {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .hero-side {
+      padding: 1.2rem;
+      display: grid;
+      gap: 0.7rem;
+      align-content: start;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.42rem 0.7rem;
+      width: fit-content;
+      font-size: 0.78rem;
+      color: #d6dcff;
+      background: rgba(127, 109, 255, 0.18);
+    }
+
+    .leaderboard {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .leaderboard h2 {
+      margin: 0 0 0.55rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      font-size: 0.87rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0.1rem;
+    }
+
+    .daily {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 1.15rem;
+    }
+
+    .daily-left,
+    .daily-right {
+      padding: 1.4rem;
+    }
+
+    .kicker {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #c4caea;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .topic-date {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .topic-title {
+      margin: 0.45rem 0 0.9rem;
+      font-size: clamp(1.3rem, 2.4vw, 1.72rem);
+      line-height: 1.25;
+    }
+
+    .topic-desc {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .sides {
+      display: grid;
+      gap: 0.6rem;
+      margin: 1rem 0;
+    }
+
+    .side-btn {
+      border: 1px solid var(--border);
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.75rem 0.85rem;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.16s, background 0.2s;
+    }
+
+    .side-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .side-btn.active {
+      border-color: transparent;
+      background: linear-gradient(90deg, rgba(127, 109, 255, 0.5), rgba(255, 107, 74, 0.38));
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .flow {
+      margin-top: 0.6rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .cta-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font: inherit;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(105deg, var(--accent-2), var(--accent));
+      cursor: pointer;
+      transition: transform 0.15s, filter 0.2s;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+    }
+
+    .queue-note {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .step {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.82rem;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .step h3 {
+      margin: 0 0 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .match-status {
+      margin-top: 0.9rem;
+      padding: 0.8rem;
+      border-radius: 12px;
+      border: 1px solid rgba(88, 227, 133, 0.34);
+      background: rgba(88, 227, 133, 0.1);
+      color: #dfffe8;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 930px) {
+      .hero,
+      .daily {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header class="nav">
+      <div class="brand">Great Debate</div>
+      <div class="badge"><span class="pulse" aria-hidden="true"></span> Daily Topic Live</div>
+    </header>
+
+    <section class="hero">
+      <article class="card hero-main">
+        <h1>Where hot takes become head-to-head battles.</h1>
+        <p class="subtitle">One topic every day. One side to pick. One winner to crown.</p>
+        <p class="lead">
+          Great Debate turns chaotic arguing into a structured social competition: pick a side on the daily prompt,
+          get matched with an opposing debater, battle in a timed private room, then let AI judges review the transcript
+          only after the debate ends.
+        </p>
+        <div class="stats">
+          <div class="stat"><strong>5 AI Judges</strong><span>Post-match verdict only</span></div>
+          <div class="stat"><strong>MMR Ranking</strong><span>Climb daily + all-time boards</span></div>
+          <div class="stat"><strong>Timed Rounds</strong><span>Fair, focused, and fast</span></div>
+        </div>
+      </article>
+
+      <aside class="card hero-side" aria-label="Live rankings preview">
+        <span class="chip">Top Debaters Today</span>
+        <div class="leaderboard">
+          <h2>Daily Leaderboard</h2>
+          <div class="row"><span>@logiclord</span><strong>1788</strong></div>
+          <div class="row"><span>@rhetoricqueen</span><strong>1752</strong></div>
+          <div class="row"><span>@counterpoint</span><strong>1717</strong></div>
+          <div class="row"><span>@you</span><strong>1610</strong></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="daily">
+      <article class="card daily-left">
+        <span class="kicker">Daily Topic System</span>
+        <p class="topic-date" id="topicDate"></p>
+        <h2 class="topic-title" id="topicTitle">Loading topic...</h2>
+        <p class="topic-desc" id="topicDescription"></p>
+
+        <div class="sides" id="sidesContainer"></div>
+
+        <p class="flow">
+          Next: random match with the opposite side, private timed debate, then transcript-only AI judging and rank updates.
+        </p>
+
+        <div class="cta-wrap">
+          <button class="primary-btn" id="joinQueueBtn" type="button">Join Debate Queue</button>
+          <span class="queue-note" id="queueNote">Choose a side to queue up.</span>
+        </div>
+
+        <div class="match-status" id="matchStatus" aria-live="polite">
+          Waiting for your side selection.
+        </div>
+      </article>
+
+      <aside class="card daily-right">
+        <span class="kicker">How It Works</span>
+        <div class="pipeline">
+          <div class="step">
+            <h3>1) Fresh prompt every day</h3>
+            <p>One topic is active for all players to keep the community focused and comparable.</p>
+          </div>
+          <div class="step">
+            <h3>2) Side selection + instant matchmaking</h3>
+            <p>Choose a stance and get paired against someone arguing the opposite position.</p>
+          </div>
+          <div class="step">
+            <h3>3) Timed private debate</h3>
+            <p>Argue in a controlled room with clear end conditions and transcript capture.</p>
+          </div>
+          <div class="step">
+            <h3>4) AI verdict after time expires</h3>
+            <p>Five judge personas score argument quality and update MMR plus leaderboard placement.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const topicBank = [
+        {
+          title: "Should AI-generated content require visible disclosure labels on all social feeds?",
+          description: "Debate trust, creativity, platform incentives, and whether mandatory labels help or hurt discourse.",
+          sides: [
+            "Yes - every AI-assisted post should be clearly labeled.",
+            "No - labeling should be optional or context-specific."
+          ]
+        },
+        {
+          title: "Should universities allow AI writing tools in graded coursework?",
+          description: "Discuss learning outcomes, fairness, access inequity, and what meaningful authorship should mean.",
+          sides: [
+            "Yes - AI is the new calculator and should be integrated.",
+            "No - unrestricted use undermines core writing skills."
+          ]
+        },
+        {
+          title: "Should cities prioritize public transit over expanding roads?",
+          description: "Compare economic growth, environmental impact, commuting equity, and implementation realism.",
+          sides: [
+            "Yes - invest in transit first for long-term gains.",
+            "No - road expansion remains the practical priority."
+          ]
+        },
+        {
+          title: "Should short-form video platforms be age-restricted for users under 16?",
+          description: "Balance youth safety and development against personal freedom, family agency, and enforcement challenges.",
+          sides: [
+            "Yes - strict age gates are necessary for wellbeing.",
+            "No - better parental controls are enough."
+          ]
+        }
+      ];
+
+      const dateEl = document.getElementById("topicDate");
+      const titleEl = document.getElementById("topicTitle");
+      const descriptionEl = document.getElementById("topicDescription");
+      const sidesContainer = document.getElementById("sidesContainer");
+      const queueBtn = document.getElementById("joinQueueBtn");
+      const queueNote = document.getElementById("queueNote");
+      const matchStatus = document.getElementById("matchStatus");
+
+      let selectedSide = null;
+
+      function getDaySeed(date) {
+        return Math.floor(date.getTime() / 86400000);
+      }
+
+      function getDailyTopic(date) {
+        const idx = getDaySeed(date) % topicBank.length;
+        return topicBank[idx];
+      }
+
+      function renderTopic() {
+        const now = new Date();
+        const topic = getDailyTopic(now);
+        dateEl.textContent = "Topic for " + now.toLocaleDateString(undefined, {
+          weekday: "long",
+          month: "long",
+          day: "numeric"
+        });
+        titleEl.textContent = topic.title;
+        descriptionEl.textContent = topic.description;
+
+        sidesContainer.innerHTML = "";
+        topic.sides.forEach(function (sideText, index) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "side-btn";
+          btn.textContent = sideText;
+          btn.setAttribute("aria-pressed", "false");
+          btn.addEventListener("click", function () {
+            selectedSide = index;
+            Array.from(sidesContainer.querySelectorAll(".side-btn")).forEach(function (el, i) {
+              const active = i === selectedSide;
+              el.classList.toggle("active", active);
+              el.setAttribute("aria-pressed", String(active));
+            });
+            queueNote.textContent = "Ready: " + sideText;
+            matchStatus.textContent = "Side selected. Join queue to match with an opposing debater.";
+          });
+          sidesContainer.appendChild(btn);
+        });
+      }
+
+      queueBtn.addEventListener("click", function () {
+        if (selectedSide === null) {
+          matchStatus.textContent = "Pick a side first so we can match you against the opposite argument.";
+          return;
+        }
+        queueBtn.disabled = true;
+        queueBtn.textContent = "Searching...";
+        matchStatus.textContent = "Finding an opponent with the opposite stance...";
+
+        window.setTimeout(function () {
+          matchStatus.textContent = "Match found. Opening a private timed room now.";
+          queueBtn.disabled = false;
+          queueBtn.textContent = "Join Debate Queue";
+        }, 1400);
+      });
+
+      renderTopic();
+    })();
+  </script>
+</body>
+</html>

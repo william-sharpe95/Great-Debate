@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Great Debate — Project Proposal</title>
+  <style>
+    /* --- CSS variables & reset --- */
+    :root {
+      --bg-deep: #0f0f14;
+      --bg-card: #1a1a24;
+      --bg-card-hover: #22222e;
+      --accent: #ff6b4a;
+      --accent-soft: rgba(255, 107, 74, 0.15);
+      --accent-2: #7c5cff;
+      --accent-3: #2ee6a6;
+      --text: #f4f4f6;
+      --text-muted: #a8a8b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --max-read: 42rem;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      line-height: 1.55;
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 120% 80% at 10% -20%, rgba(124, 92, 255, 0.22), transparent 50%),
+        radial-gradient(ellipse 100% 60% at 100% 0%, rgba(255, 107, 74, 0.18), transparent 45%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(46, 230, 166, 0.08), transparent 50%);
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      background: linear-gradient(145deg, var(--bg-card) 0%, #15151f 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 2rem 1.75rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(105deg, #fff 0%, #e8e8f0 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero .subtitle {
+      margin: 0 0 1rem;
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: var(--accent-3);
+      font-weight: 600;
+    }
+    .hero .intro {
+      margin: 0;
+      max-width: var(--max-read);
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* --- Tab bar --- */
+    .tablist {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      padding: 0.35rem;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .tablist button {
+      flex: 1;
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .tablist button:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .tablist button:focus-visible {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 2px;
+    }
+    .tablist button[aria-selected="true"] {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(124, 92, 255, 0.35), rgba(255, 107, 74, 0.25));
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    /* --- Panels --- */
+    .panel {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+    .panel.is-active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.75rem 2rem;
+      box-shadow: var(--shadow);
+    }
+    .card h2 {
+      margin: 0 0 1rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* --- Overview prose --- */
+    .overview-prose {
+      max-width: var(--max-read);
+    }
+    .overview-prose p {
+      margin: 0 0 1.1rem;
+      color: var(--text-muted);
+    }
+    .overview-prose p:last-child { margin-bottom: 0; }
+
+    .tech-note {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .tech-note strong { color: var(--text); }
+
+    /* --- Team --- */
+    .team-name {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    table.data th,
+    table.data td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data th {
+      background: rgba(124, 92, 255, 0.12);
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    table.data tbody tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    table.data tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* --- Storyboard --- */
+    table.storyboard {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.storyboard th,
+    table.storyboard td {
+      padding: 1rem;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border);
+    }
+    table.storyboard th {
+      background: rgba(46, 230, 166, 0.08);
+      color: var(--text);
+      font-weight: 600;
+      text-align: left;
+    }
+    table.storyboard tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .thumb-cell {
+      width: 140px;
+    }
+    .thumb-frame {
+      width: 120px;
+      min-height: 160px;
+      max-width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #2a2a38, #1e1e28);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+    .thumb-frame img {
+      width: 100%;
+      height: auto;
+      min-height: 120px;
+      object-fit: cover;
+      display: block;
+      vertical-align: middle;
+    }
+    .thumb-frame img.is-hidden { display: none; }
+    .thumb-placeholder {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .thumb-placeholder.is-visible { display: flex; }
+
+    .scene-desc,
+    .narration {
+      color: var(--text-muted);
+    }
+    .narration {
+      font-style: italic;
+      color: var(--text);
+      opacity: 0.92;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Great Debate</h1>
+      <p class="subtitle">Where hot takes become head-to-head battles.</p>
+      <p class="intro">
+        Drop into a daily topic, pick your side, and go toe-to-toe with a real opponent in a private room—then let the judges crown a winner and watch your rank climb.
+      </p>
+    </header>
+
+    <nav class="tablist" role="tablist" aria-label="Proposal sections">
+      <button type="button" role="tab" id="tab-overview" aria-selected="true" aria-controls="panel-overview">Overview</button>
+      <button type="button" role="tab" id="tab-team" aria-selected="false" aria-controls="panel-team">Team</button>
+      <button type="button" role="tab" id="tab-storyboard" aria-selected="false" aria-controls="panel-storyboard">Storyboard</button>
+    </nav>
+
+    <main>
+      <!-- Overview -->
+      <section id="panel-overview" class="panel is-active card" role="tabpanel" aria-labelledby="tab-overview">
+        <h2>Overview</h2>
+        <div class="overview-prose">
+          <p>
+            People love arguing about the things they care about—but most online spaces turn disagreement into noise: endless threads, bad faith, and no real structure. Great Debate is built on a simple idea: give that energy a daily home where it feels fair, fast, and actually fun.
+          </p>
+          <p>
+            Each day brings a fresh prompt. You choose a side, get randomly matched with someone on the other side, and argue in a private, timed chat while the rest of the world does the same. When time is up, five AI judges—each with its own persona—reads the full transcript (AI never joins the live debate), picks a winner, and updates your MMR-style ranking. Daily and all-time leaderboards make the competition feel alive, and stored transcripts open the door to sentiment and trend insights across topics over time. For everyday users, it is a social game with bragging rights; for communities, fandoms, or light research and marketing curiosity, it is a window into how opinions cluster and shift. Down the road, debate clubs or classrooms could use the same flow for practice, coaching, and structured communication—without changing what makes the core experience addictive.
+          </p>
+          <p>
+            To ship it, we would build a daily topic system, side selection, random opponent matching, a private real-time debate chat with clear end rules, and an post-match AI pipeline for judging and optional summaries. We would persist transcripts for later analysis, implement MMR-style rankings, and surface daily and overall leaderboards—plus optional debate-quality feedback users can choose to read after the fact.
+          </p>
+        </div>
+        <p class="tech-note">
+          <strong>Tech stack (student-realistic):</strong> a simple frontend in HTML, CSS, and JavaScript; a lightweight backend (for example Flask, or a Firebase/Supabase-style service) for auth, matching, and chat; a small database for users, logs, rankings, and topic history; and API-based LLM calls only after a debate ends—for judging, summaries, trend-style analysis, and optional feedback.
+        </p>
+      </section>
+
+      <!-- Team -->
+      <section id="panel-team" class="panel card" role="tabpanel" aria-labelledby="tab-team" hidden>
+        <h2>Team</h2>
+        <p class="team-name">The Great Debaters</p>
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Email</th>
+                <th scope="col">NetID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>William</td>
+                <td>Sharpe</td>
+                <td>william.sharpe@yale.edu</td>
+                <td>wcs29</td>
+              </tr>
+              <tr>
+                <td>Jordan</td>
+                <td>Lee-kook</td>
+                <td>jordan.lee-kook@yale.edu</td>
+                <td>jl3972</td>
+              </tr>
+              <tr>
+                <td>Michael</td>
+                <td>Whang</td>
+                <td>michael.whang@yale.edu</td>
+                <td>mw2428</td>
+              </tr>
+              <tr>
+                <td>Nick</td>
+                <td>Sirias</td>
+                <td>nick.sirias@yale.edu</td>
+                <td>ns2294</td>
+              </tr>
+              <tr>
+                <td>Clea</td>
+                <td>Wang</td>
+                <td>clea.wang@yale.edu</td>
+                <td>cw2285</td>
+              </tr>
+              <tr>
+                <td>Dita</td>
+                <td>Rao</td>
+                <td>dita.rao@yale.edu</td>
+                <td>nr562</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Storyboard -->
+      <section id="panel-storyboard" class="panel card" role="tabpanel" aria-labelledby="tab-storyboard" hidden>
+        <h2>Storyboard</h2>
+        <p class="overview-prose" style="margin-bottom:1.25rem; max-width:none;">
+          A short vertical hype reel: three beats from “everyone’s got an opinion” to “you’re matched—go” to “judges, ranks, leaderboard.”
+        </p>
+        <div class="table-scroll">
+          <table class="storyboard">
+            <thead>
+              <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Scene description</th>
+                <th scope="col">Narration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="thumb-cell">
+                  <div class="thumb-frame" data-thumb>
+                    <img src="scene_01.png" alt="Phone frame with energetic social-style debate prompt graphics" width="120" height="160" />
+                    <span class="thumb-placeholder" aria-hidden="true">Image placeholder — add scene_01.png</span>
+                  </div>
+                </td>
+                <td class="scene-desc">
+                  <strong>Scene 1 — The hook.</strong> Close-up, vertical phone shot in a bright bedroom desk setting; thumb scrolls a chaotic feed, then a full-screen card slams in with a bold daily debate question and pulsing “pick a side” energy.
+                </td>
+                <td class="narration">
+                  “You’ve got a take. Everyone does. Today’s question is waiting—are you Team A or Team B?”
+                </td>
+              </tr>
+              <tr>
+                <td class="thumb-cell">
+                  <div class="thumb-frame" data-thumb>
+                    <img src="scene_02.png" alt="Mobile app UI showing side selection and live private debate chat" width="120" height="160" />
+                    <span class="thumb-placeholder" aria-hidden="true">Image placeholder — add scene_02.png</span>
+                  </div>
+                </td>
+                <td class="scene-desc">
+                  <strong>Scene 2 — The match.</strong> Medium shot on phone held two-handed in a coffee-shop window seat; UI shows side buttons, a quick “matched” burst, then a private chat thread with messages flying in as a subtle timer ticks.
+                </td>
+                <td class="narration">
+                  “Choose your side. Get paired with your opposite. Argue your heart out—just you, them, and the clock.”
+                </td>
+              </tr>
+              <tr>
+                <td class="thumb-cell">
+                  <div class="thumb-frame" data-thumb>
+                    <img src="scene_03.png" alt="Results screen with AI judge verdict, MMR rank change, and leaderboard" width="120" height="160" />
+                    <span class="thumb-placeholder" aria-hidden="true">Image placeholder — add scene_03.png</span>
+                  </div>
+                </td>
+                <td class="scene-desc">
+                  <strong>Scene 3 — The verdict.</strong> Low-angle hero shot of the phone on a dark surface with a spotlight rim; screen reveals judge votes, a rank-up animation, and a leaderboard wipe with the user’s name climbing.
+                </td>
+                <td class="narration">
+                  “Judges have spoken. You ranked up. Prove it again tomorrow—climb the board.”
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Great Debate — class project proposal · AI assists only after debates end
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+      var panels = {
+        'tab-overview': document.getElementById('panel-overview'),
+        'tab-team': document.getElementById('panel-team'),
+        'tab-storyboard': document.getElementById('panel-storyboard')
+      };
+
+      function activateTab(activeBtn) {
+        tabs.forEach(function (btn) {
+          var selected = btn === activeBtn;
+          btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+          btn.tabIndex = selected ? 0 : -1;
+          var panel = panels[btn.id];
+          if (panel) {
+            if (selected) {
+              panel.classList.add('is-active');
+              panel.removeAttribute('hidden');
+            } else {
+              panel.classList.remove('is-active');
+              panel.setAttribute('hidden', '');
+            }
+          }
+        });
+        activeBtn.focus();
+      }
+
+      tabs.forEach(function (btn, index) {
+        btn.addEventListener('click', function () {
+          activateTab(btn);
+        });
+        btn.addEventListener('keydown', function (e) {
+          var key = e.key;
+          if (key === 'ArrowRight' || key === 'ArrowLeft') {
+            e.preventDefault();
+            var next = key === 'ArrowRight' ? index + 1 : index - 1;
+            if (next < 0) next = tabs.length - 1;
+            if (next >= tabs.length) next = 0;
+            activateTab(tabs[next]);
+          }
+        });
+      });
+
+      // Roving tabindex: only active tab in tab order
+      tabs.forEach(function (btn) {
+        btn.tabIndex = btn.getAttribute('aria-selected') === 'true' ? 0 : -1;
+      });
+
+      // Missing image: show placeholder inside fixed frame (no base64)
+      document.querySelectorAll('[data-thumb] img').forEach(function (img) {
+        function showPlaceholder() {
+          img.classList.add('is-hidden');
+          var ph = img.parentElement.querySelector('.thumb-placeholder');
+          if (ph) ph.classList.add('is-visible');
+        }
+        img.addEventListener('error', showPlaceholder);
+        if (img.complete && img.naturalWidth === 0) showPlaceholder();
+      });
+    })();
+  </script>
+</body>
+</html>
